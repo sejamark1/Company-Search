@@ -19,7 +19,12 @@ from xml.sax.handler import all_properties
 from flask import Flask, render_template, url_for, request, jsonify 
 from flask_sqlalchemy import SQLAlchemy 
 from flask_marshmallow import Marshmallow 
-import os 
+import os, json, sys, requests
+
+
+#API 
+API_KEY = "e2d9c1cf-15c9-438d-97c2-d305834265bb"
+
 
 #Init app
 app = Flask(__name__, template_folder='template') 
@@ -52,10 +57,27 @@ companies_schema = CompanySchema(many=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def index(): 
-    if request.method == "POST": 
-        return "Hello"
-    else:
-        return render_template("index.html")
+    url = "https://api.companieshouse.gov.uk/search/companies?q={}"
+    query = "tesco"
+    api_key = "e2d9c1cf-15c9-438d-97c2-d305834265bb"
+
+    response = requests.get(url.format(query),auth=(api_key,''))
+    json_search_result = response.text
+    search_result = json.JSONDecoder().decode(json_search_result)
+
+
+
+    v = None
+
+    for company in search_result['items']:
+        v = (company['title'])
+
+
+    return v
+    # if request.method == "POST": 
+    #     return "Hello"
+    # else:
+    #     return render_template("index.html")
  
 
 #if request is made to (/), get method will return the following. 
