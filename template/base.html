@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%block head%} {%endblock%}
+
+    
+</head>
+<body>
+    <header>
+        <!-- ICONS -->
+        <div id="icons">
+            <div  id="interest_icon">
+                <a href="/interest">       
+                    <img src="{{url_for('static', filename='images/interest.png')}}" alt="">
+                </a>
+            </div>
+            <div  style="right:160px" id="interest_icon">
+                <a href="/">       
+                    <img src="{{url_for('static', filename='images/search.png')}}" alt="">
+                </a>
+            </div>
+        </div>
+    
+    </header>
+    
+    {% block body%} {%endblock%}    
+</body>
+</html>

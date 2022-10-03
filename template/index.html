@@ -1,59 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')  }}">
-  
-    <title>UKSOLUTION-COMPANY</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <header>
-        <div id="interest_icon">
-            <img src="{{url_for('static', filename='images/interest.png')}}" alt="">
-        </div>
+<!-- HEAD TAG -->
+{%block head%}
 
-    </header>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')  }}">
+<title>Search - UKDS</title>
 
-    
-    <div id="content"> 
-        <div id="search-bar">
-            <h2>Search Company</h2>
-            <center id="searchbox">
-                <form action="/">
-                    <input id="company-search" type="text" placeholder="Search companies">
-                    <input id="btn" type="submit" value="Search"> 
-                </form>
-            </center>
+{%endblock%} 
 
-        </div>
+<!-- BODY TAG -->
 
-        <div id="searched-results">
-
-            <div id="search-result"> 
-                <center>
-                    <h4>Companysdfasdfasdfasdfasdfasdf name</h4>
-                    <button>+</button>
-                </center>
-            </div>
-
-            
+{%block body%} 
 
 
-            
-        </div>
+
+<!-- SEARCH CONTENT -->
+<div id="content"> 
+    <div id="search-bar">
+        <h2>Search Company</h2>
+        <center id="searchbox">
+            <form action="/" method="POST">
+                <input id="company-search" type="text" name="company_search_content" placeholder="Search companies">
+                <input id="btn" type="submit" value="Search"> 
+            </form>
+        </center>
+
     </div>
 
+    <div id="searched-results">
 
 
+        {%for company in companies%}
+        <div id="search-result"> 
+            <center>
+                <h4>{{company["title"]}}</h4>
+                <button id="btn_to_add">+</button>
+            </center>
+        </div>
+        {%endfor%}
+        
 
 
+        
+    </div>
+</div>
 
+{%endblock%} 
 
-
-
-    
-</body>
-</html>

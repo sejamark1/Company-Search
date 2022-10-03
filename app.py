@@ -11,16 +11,19 @@ NOT FRONT END QUERY, SHOULD BE SERVER SIDE.
 """
 
 
+from array import array
 from email.policy import strict
 from itertools import product
 from math import prod
 from operator import methodcaller
 from xml.sax.handler import all_properties
+
+from django.shortcuts import redirect
 from flask import Flask, render_template, url_for, request, jsonify 
 from flask_sqlalchemy import SQLAlchemy 
 from flask_marshmallow import Marshmallow 
 import os, json, sys, requests
-
+from django.shortcuts import redirect
 
 #API 
 API_KEY = "e2d9c1cf-15c9-438d-97c2-d305834265bb"
@@ -57,27 +60,19 @@ companies_schema = CompanySchema(many=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def index(): 
-    url = "https://api.companieshouse.gov.uk/search/companies?q={}"
-    query = "tesco"
-    api_key = "e2d9c1cf-15c9-438d-97c2-d305834265bb"
+    if request.method=='POST':
+        url = "https://api.companieshouse.gov.uk/search/companies?q={}"
+        query = str(request.form["company_search_content"])
+        api_key = "e2d9c1cf-15c9-438d-97c2-d305834265bb"
 
-    response = requests.get(url.format(query),auth=(api_key,''))
-    json_search_result = response.text
-    search_result = json.JSONDecoder().decode(json_search_result)
+        response = requests.get(url.format(query),auth=(api_key,''))
+        json_search_result = response.text
+        search_result = json.JSONDecoder().decode(json_search_result)
 
-
-
-    v = None
-
-    for company in search_result['items']:
-        v = (company['title'])
-
-
-    return v
-    # if request.method == "POST": 
-    #     return "Hello"
-    # else:
-    #     return render_template("index.html")
+        return render_template("index.html", companies = search_result['items'])
+    
+        
+    return render_template("index.html", companies = [])
  
 
 #if request is made to (/), get method will return the following. 
@@ -86,7 +81,9 @@ def get():
 
 
 
-
+# @app.route('/interest')
+# def view_or_remove_interest(): 
+#     return render_template("interest.html")
 
 
 #Create a fake company and add the data to the database, not from API. 
@@ -100,11 +97,14 @@ def add_company():
     return company_schema.jsonify(new_company)
 
 #Get the product, also option to delete, thus POST 
-@app.route('/myinterst', methods=['GET', 'POST']) 
+@app.route('/interest', methods=['GET', 'POST']) 
 def get_companies(): 
     all_company= CompanyIntersts.query.all() 
     result = companies_schema.dump(all_company)
-    return jsonify(result) 
+    return render_template("interest.html", interests = result) 
+#    return jsonify(result[0]["company_name"])
+
+
 
 
 
@@ -116,12 +116,13 @@ def get_company(id):
 
 
 #DELETE COMPANY 
-@app.route('/myinterst/<id>', methods=['DELETE']) 
+@app.route('/interest/<int:id>', methods=['DELETE']) 
 def delete_company(id): 
-    company= CompanyIntersts.query.get(id) 
-    db.session.delete(company) 
+    company_delete = CompanyIntersts.query.get_or_404(id) 
+    #company= CompanyIntersts.query.get(id) 
+    db.session.delete(company_delete) 
     db.session.commit()
-    return company_schema.jsonify(company)
+    return redirect("/")
 
 
 

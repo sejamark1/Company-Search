@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+<!-- HEAD TAG -->
+{%block head%}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')  }}">
+<title>My Interest - UKDS</title>
+
+{%endblock%} 
+
+<!-- BODY TAG -->
+
+{%block body%} 
+
+<div id="content"> 
+    <div id="search-bar">
+        <h2>My Interest</h2>
+
+        
+
+    </div>
+
+    <div id="searched-results">
+
+
+        {%for interest in interests%}
+        <div id="search-result"> 
+            <center>
+                <h4>{{interest["company_name"]}}</h4>
+                <a href="/interest/{{interest['id']}}">
+                    <button id="btn_to_remove">+</button>
+                </a>
+            </center>
+        </div>
+        {%endfor%}
+        
+
+
+        
+    </div>
+</div>
+
+
+{%endblock%} 
+
