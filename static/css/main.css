@@ -106,7 +106,7 @@ form > #btn{
     padding-left: 20px;
 }
 
-#search-result > center > button{ 
+#search-result > center > a>button{ 
     position: absolute;
     right: 10px;
     height: 50px;
@@ -124,6 +124,20 @@ form > #btn{
 }
 
 /* INTEREST HTML */
+
+#del_msg{ 
+    text-align: center;
+    font-size: 17px;
+    font-weight: 100;
+    background: #e9da8f;
+    width: 30%;
+    height: 30px;
+    padding-top: 13px;
+    border-radius: 6px;
+    border: 1px solid #bd845d;
+    color: #ab0000;
+
+}
 
 #btn_to_remove{ 
     transform: rotate(0deg);

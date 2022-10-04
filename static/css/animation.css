@@ -1,0 +1,13 @@
+/* INTEREST PAGE */
+/* - After appearing, the delete message box should dissapear */
+#searched-results > #del_msg_box{ 
+    animation-name: disappear_delete_info;
+    animation-delay: 2s;
+    animation-duration: 1s;
+    animation-fill-mode: forwards; 
+}
+
+@keyframes disappear_delete_info{ 
+    from{opacity: 1;display: block;}
+    to{opacity: 0; display: none; position: absolute;}
+}

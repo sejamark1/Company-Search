@@ -4,6 +4,7 @@
 {%block head%}
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')  }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/animation.css')  }}">
 <title>My Interest - UKDS</title>
 
 {%endblock%} 
@@ -15,19 +16,21 @@
 <div id="content"> 
     <div id="search-bar">
         <h2>My Interest</h2>
-
-        
-
     </div>
 
     <div id="searched-results">
 
+        {%if deleteMessage%}
+        <center id="del_msg_box">
+            <h1 id="del_msg">{{deleteMessage}}</h1>
+        </center>
+        {%endif%}
 
         {%for interest in interests%}
         <div id="search-result"> 
             <center>
                 <h4>{{interest["company_name"]}}</h4>
-                <a href="/interest/{{interest['id']}}">
+                <a href="{{url_for ('delete_interest_from_database', id=interest['id'])}}">
                     <button id="btn_to_remove">+</button>
                 </a>
             </center>

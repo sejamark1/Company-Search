@@ -29,12 +29,15 @@
 
     <div id="searched-results">
 
+        <p style="text-align:center">We have found {{resultCount}} results for you</p>
 
         {%for company in companies%}
         <div id="search-result"> 
             <center>
                 <h4>{{company["title"]}}</h4>
-                <button id="btn_to_add">+</button>
+                <a href="{{url_for('add_company_to_database', companyName=company['title'])}}">
+                    <button id="btn_to_add">+</button>
+                </a>
             </center>
         </div>
         {%endfor%}
