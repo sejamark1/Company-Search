@@ -1,12 +1,3 @@
-""" TASK
-To build a Web Application which allows a user to search for Companies using the
-Companies House API and save companies of interest.
-
-NOT FRONT END QUERY, SHOULD BE SERVER SIDE. 
-"""
-
-
-
 from array import array
 from curses import flash
 from email.policy import strict
@@ -14,7 +5,6 @@ from itertools import product
 from math import prod
 from operator import methodcaller
 from xml.sax.handler import all_properties
-
 from django.shortcuts import redirect
 from flask import Flask, render_template, url_for, request, jsonify, redirect
 from flask_sqlalchemy import SQLAlchemy 
@@ -22,8 +12,16 @@ from flask_marshmallow import Marshmallow
 import os, json, sys, requests
 from django.shortcuts import redirect
 
+from myfiles.templateReturns import *
+
+
+
+
+ 
+
 #API 
 API_KEY = "e2d9c1cf-15c9-438d-97c2-d305834265bb"
+query_search_result = ""
 
 
 #Init app
@@ -33,10 +31,12 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 #Init Database 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir,'db.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
+
 #Init db 
 db = SQLAlchemy(app) 
 #Init marshmallow 
 ma = Marshmallow(app) 
+
 
 #Company class 
 class CompanyIntersts(db.Model): 
@@ -57,7 +57,11 @@ companies_schema = CompanySchema(many=True)
 
 
 
-query_search_result = ""
+
+
+
+
+
 #RETURNS the user interest data that is stored in the database. 
 def get_interest_from_database(): 
     all_company= CompanyIntersts.query.all() 
@@ -68,25 +72,10 @@ def get_search_results_from_API(query):
     params = {'limit':50}
     url = "https://api.companieshouse.gov.uk/search/companies?q={}"
     #query = str(request.form["company_search_content"])
-    api_key = "e2d9c1cf-15c9-438d-97c2-d305834265bb"
-
-    response = requests.get(url.format(query),auth=(api_key,''), params=params)
+    response = requests.get(url.format(query),auth=(API_KEY,''), params=params)
     json_search_result = response.text
     search_result = json.JSONDecoder().decode(json_search_result)
     return search_result
-
-#Get the searched result and displays it here.
-@app.route('/', methods=['GET', 'POST'])
-def index(): 
-    if request.method=='POST':
-        write_search_result(str(request.form["company_search_content"]))
-        query_search_result = str(request.form["company_search_content"])
-        search_result = get_search_results_from_API(query_search_result)
-        return render_template("index.html", resultCount = len(search_result['items']) , companies = search_result['items'])        
-    return render_template("index.html", companies = [])
- 
-
-
 
 
 def write_search_result(data):
@@ -96,6 +85,20 @@ def write_search_result(data):
 def read_search_result():
     with open("search.txt", "r") as searchFile: 
         return searchFile.read()
+
+
+
+#Get the searched result and displays it here.
+@app.route('/', methods=['GET', 'POST'])
+def index(): 
+    if request.method=='POST':
+        write_search_result(str(request.form["company_search_content"]))
+        query_search_result = str(request.form["company_search_content"])
+        search_result = get_search_results_from_API(query_search_result)
+        return returnSearchPageTemplate(search_result)  
+    return render_template("index.html", companies = [])
+ 
+
 
 
 
@@ -110,17 +113,17 @@ def add_company_to_database(companyName):
         db.session.commit()
         query_search_result = read_search_result() #
         search_result = get_search_results_from_API(query_search_result)
-        return render_template("index.html", resultCount = len(search_result['items']) , companies = search_result['items'])    
+        return returnSearchPageTemplate(search_result)  
     except:
         search_result = get_search_results_from_API(query_search_result)
-        return render_template("index.html", resultCount = len(search_result['items']) , companies = search_result['items'])        
+        return returnSearchPageTemplate(search_result)  
 
     # return company_schema.jsonify(new_company)
 
 #Get the product, also option to delete, thus POST 
 @app.route('/interest', methods=['GET', 'POST']) 
 def get_companies(): 
-    return render_template("interest.html", interests = get_interest_from_database(),deleteMessage="") 
+    return returnInterestTemplate(get_interest_from_database(), "")
 #    return jsonify(result[0]["company_name"])
 
 
@@ -136,10 +139,9 @@ def delete_interest_from_database(id):
         db.session.commit()
         Flask.flash(f"Sucessfully Deleted!")
         #return Flask.redirect(url_for("interest"))
-        return render_template("interest.html", interests = get_interest_from_database(),deleteMessage="Company was deleted") 
+        return returnInterestTemplate(get_interest_from_database(), "Sucessfully deleted!")
     except:
-        return render_template("interest.html", interests = get_interest_from_database(), deleteMessage="Company was deleted") 
-
+        return returnInterestTemplate(get_interest_from_database(), "Sucessfully deleted!")
 
 
 
