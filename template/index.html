@@ -4,9 +4,21 @@
 {%block head%}
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')  }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/animation.css')  }}">
+
 <title>Search - UKDS</title>
 
 {%endblock%} 
+
+
+{%block div%}
+<div style=" position: absolute; right: 0; " id="interest_icon">
+    <a href="/interest">       
+        <img id="tBarIcon" src="{{url_for('static', filename='images/interest.png')}}" alt="">
+        <div id="interest_count">{{numOfInterest}}</div>
+    </a>
+</div>
+{%endblock%}
 
 <!-- BODY TAG -->
 
@@ -29,7 +41,19 @@
 
     <div id="searched-results">
 
+        {%if resultCount %}
         <p style="text-align:center">We have found {{resultCount}} results for you</p>
+        {%else%}
+        <p style="text-align:center">Enter your search to see results</p>
+
+        {%endif%}
+
+        {%if infoMessage%}
+        <center id="del_msg_box">
+            <h1 id="del_msg">{{infoMessage}}</h1>
+        </center>
+        {%endif%}
+
 
         {%for company in companies%}
         <div id="search-result"> 

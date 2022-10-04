@@ -4,27 +4,41 @@ body{
     font-family: Arial, Helvetica, sans-serif 
 
 }
+a{ 
+    text-decoration: none;
+}
 
 
 header{ 
     width: 100%;
     height: 60px;
-    background: black;
+    background: #262260;
 
 }
 #icons{ 
     position: absolute;
+    width: 100%;
     right: 50px;
     display: flex;
+    padding-top: 3px;
 }
  #interest_icon{ 
-    right: 100px;
     padding: 7px;
     cursor: pointer;
 }
+.logo{ 
+    position: relative;
+    left: 70px;
+}
+.logo > a > #img_logo{ 
+    height: 30px;
+    background: white;
+    padding: 5px;
+    margin-top: -1px;
+}
 
 #interest_icon > a > img{ 
-    height: 50px;
+    height: 40px;
     transition: 0.5s all ease-out;
 }
 
@@ -46,7 +60,7 @@ header{
 #content > #search-bar > h2{ 
     margin: 0 auto;
     text-align: center;
-    background-color: #1d70b8;
+    background-color: #b5000bf2;
     color: white;
     height: 50px;
     padding-top: 25px;
@@ -68,9 +82,11 @@ form > #btn{
     height: 45px;
     margin-left: -6px;
     width: 100px;
-    background: #1d70b8;
+    background: #4d45c1;
     color: white;
     font-weight: 700;
+    border: none;
+    cursor: pointer;
 }
 
 
@@ -106,18 +122,20 @@ form > #btn{
     padding-left: 20px;
 }
 
-#search-result > center > a>button{ 
+#search-result > center > a > button{ 
     position: absolute;
     right: 10px;
     height: 50px;
     width: 50px;
     border-radius: 100px;
-    background: #1d70b8;
     border: 1px solid white;
     color: white;
     font-size: 40px;
     cursor: pointer;
     transition: 0.5s all ease-out;
+}
+#search-result > center > a > #btn_to_add{
+    background: #1d70b8; 
 }
 #search-result > center > #btn_to_add:hover{ 
     transform: scale(0.9);
@@ -140,8 +158,26 @@ form > #btn{
 }
 
 #btn_to_remove{ 
-    transform: rotate(0deg);
+    transform: rotate(45deg);
+    background: #a30000; 
+
 }
 #btn_to_remove:hover{ 
-    transform: rotate(45deg);
+    background: #b10000; 
+
+}
+
+#interest_count{ 
+    height: 15px;
+    width: 15px;
+    background: red;
+    text-align: center;
+    border-radius: 100%;
+    margin: -34px 0 0 13px;
+    font-size: 10px;
+    color: white;
+    padding-right: 1px;
+    padding-top: 2px;
+    transform: scale(1.3);
+
 }

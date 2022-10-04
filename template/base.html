@@ -12,15 +12,19 @@
     <header>
         <!-- ICONS -->
         <div id="icons">
-            <div  id="interest_icon">
-                <a href="/interest">       
-                    <img src="{{url_for('static', filename='images/interest.png')}}" alt="">
+            <div class="logo" id="interest_icon">
+                <a href="/">       
+                    <img id="img_logo" src="{{url_for('static', filename='images/ukdsc.png')}}" alt="">
                 </a>
             </div>
-            <div  style="right:160px" id="interest_icon">
+            {%block div%}
+            {%endblock%}
+     
+            <div  style="right: 70px;position: absolute;" id="interest_icon">
                 <a href="/">       
-                    <img src="{{url_for('static', filename='images/search.png')}}" alt="">
+                    <img id="tBarIcon" src="{{url_for('static', filename='images/search.png')}}" alt="">
                 </a>
+
             </div>
         </div>
     

@@ -9,6 +9,15 @@
 
 {%endblock%} 
 
+
+{%block div%}
+<div style=" position: absolute; right: 0; " id="interest_icon">
+    <a href="/interest">       
+        <img id="tBarIcon" src="{{url_for('static', filename='images/interest.png')}}" alt="">
+        <div id="interest_count">{{numOfInterest}}</div>
+    </a>
+</div>
+{%endblock%}
 <!-- BODY TAG -->
 
 {%block body%} 

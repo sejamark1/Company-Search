@@ -9,10 +9,13 @@ from django.shortcuts import redirect
 from flask import Flask, render_template, url_for, request, jsonify, redirect
 from flask_sqlalchemy import SQLAlchemy 
 from flask_marshmallow import Marshmallow 
-import os, json, sys, requests
+import os, json, sys, requests, time
 from django.shortcuts import redirect
 
+
 from myfiles.templateReturns import *
+from myfiles.inputSearchResults import * 
+
 
 
 
@@ -78,15 +81,6 @@ def get_search_results_from_API(query):
     return search_result
 
 
-def write_search_result(data):
-    with open("search.txt", "w") as searchFile: 
-        searchFile.write(data)
-
-def read_search_result():
-    with open("search.txt", "r") as searchFile: 
-        return searchFile.read()
-
-
 
 #Get the searched result and displays it here.
 @app.route('/', methods=['GET', 'POST'])
@@ -95,8 +89,8 @@ def index():
         write_search_result(str(request.form["company_search_content"]))
         query_search_result = str(request.form["company_search_content"])
         search_result = get_search_results_from_API(query_search_result)
-        return returnSearchPageTemplate(search_result)  
-    return render_template("index.html", companies = [])
+        return returnSearchPageTemplate(search_result,"",get_interest_from_database())  
+    return render_template("index.html", companies = [], numOfInterest = len(get_interest_from_database()))
  
 
 
@@ -113,10 +107,10 @@ def add_company_to_database(companyName):
         db.session.commit()
         query_search_result = read_search_result() #
         search_result = get_search_results_from_API(query_search_result)
-        return returnSearchPageTemplate(search_result)  
+        return returnSearchPageTemplate(search_result, str(companyName + "Added to your interest!"),get_interest_from_database() )  
     except:
         search_result = get_search_results_from_API(query_search_result)
-        return returnSearchPageTemplate(search_result)  
+        return returnSearchPageTemplate(search_result, str(companyName + " " + "Added to your interest!"),get_interest_from_database())  
 
     # return company_schema.jsonify(new_company)
 
@@ -139,13 +133,18 @@ def delete_interest_from_database(id):
         db.session.commit()
         Flask.flash(f"Sucessfully Deleted!")
         #return Flask.redirect(url_for("interest"))
+        time.sleep(10)
         return returnInterestTemplate(get_interest_from_database(), "Sucessfully deleted!")
     except:
         return returnInterestTemplate(get_interest_from_database(), "Sucessfully deleted!")
 
 
 
-#SERVER
+
+
+
+
+
 if __name__ == "__main__": 
     app.run(debug=True)
 
