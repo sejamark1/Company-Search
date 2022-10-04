@@ -1,7 +1,7 @@
 # Company-Search
  Search Companies using API
 
+Requires Companies House identity service API. 
 
-#NOTES: 
-Installing neccessary libraries: 
-pipenv install flask flask-sqlalchemy flask-marshmallow marhsmallow-sqlalchemy
+
+python app.py
