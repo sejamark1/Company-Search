@@ -22,9 +22,9 @@ from myfiles.inputSearchResults import *
 
  
 
-#API 
+
 API_KEY = "e2d9c1cf-15c9-438d-97c2-d305834265bb"
-query_search_result = ""
+query_search_result = "" #Stores searched result to show exact result when refreshing. 
 
 
 #Init app
@@ -34,12 +34,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 #Init Database 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir,'db.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
-
-#Init db 
-db = SQLAlchemy(app) 
-#Init marshmallow 
+db = SQLAlchemy(app)  
 ma = Marshmallow(app) 
-
 
 #Company class 
 class CompanyIntersts(db.Model): 
@@ -63,14 +59,14 @@ companies_schema = CompanySchema(many=True)
 
 
 
-
-
-#RETURNS the user interest data that is stored in the database. 
+"""RETREIVE DATA"""
+#Returns interest data of the client from the local database. 
 def get_interest_from_database(): 
     all_company= CompanyIntersts.query.all() 
     result = companies_schema.dump(all_company)
     return result
 
+#Returns search results from the API. 
 def get_search_results_from_API(query): 
     params = {'limit':50}
     url = "https://api.companieshouse.gov.uk/search/companies?q={}"
@@ -82,7 +78,8 @@ def get_search_results_from_API(query):
 
 
 
-#Get the searched result and displays it here.
+"""ROUTING"""
+#GET searched result from API and displays.
 @app.route('/', methods=['GET', 'POST'])
 def index(): 
     if request.method=='POST':
@@ -92,13 +89,7 @@ def index():
         return returnSearchPageTemplate(search_result,"",get_interest_from_database())  
     return render_template("index.html", companies = [], numOfInterest = len(get_interest_from_database()))
  
-
-
-
-
-
-
-#Create a fake company and add the data to the database, not from API. 
+#POSTS company based on user selection to the database. 
 @app.route('/companies/<companyName>', methods=["POST", "GET"]) 
 def add_company_to_database(companyName): 
     try:
@@ -112,22 +103,19 @@ def add_company_to_database(companyName):
         search_result = get_search_results_from_API(query_search_result)
         return returnSearchPageTemplate(search_result, str(companyName + " " + "Added to your interest!"),get_interest_from_database())  
 
-    # return company_schema.jsonify(new_company)
-
-#Get the product, also option to delete, thus POST 
+#GET company interest data from the database and displays it. 
 @app.route('/interest', methods=['GET', 'POST']) 
 def get_companies(): 
     return returnInterestTemplate(get_interest_from_database(), "")
-#    return jsonify(result[0]["company_name"])
 
 
 
-#DELETE COMPANY from interest
-#TODO: should redirect to /interest instead /interest/id
+
+#DELETE company interest from the database. 
 @app.route('/interest/<int:id>') 
 def delete_interest_from_database(id): 
     company_delete = CompanyIntersts.query.get_or_404(id) 
-    # #company= CompanyIntersts.query.get(id) 
+    #company= CompanyIntersts.query.get(id) 
     try: 
         db.session.delete(company_delete) 
         db.session.commit()
