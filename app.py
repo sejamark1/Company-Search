@@ -23,7 +23,7 @@ from myfiles.inputSearchResults import *
  
 
 
-API_KEY = "e2d9c1cf-15c9-438d-97c2-d305834265bb"
+API_KEY = "xxxxxxxxxxxx-xxxxxxxxxxx-xxxxxxxxxxxxx-xxxxxxxxxxx"#*API KEY REQUREID
 query_search_result = "" #Stores searched result to show exact result when refreshing. 
 
 
